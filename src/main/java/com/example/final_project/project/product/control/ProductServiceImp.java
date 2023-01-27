@@ -1,7 +1,7 @@
 package com.example.final_project.project.product.control;
 
 import com.example.final_project.project.product.repository.ProductDTO;
-import com.example.final_project.error.IncorrectInputException;
+import com.example.final_project.exceptions.IncorrectInputException;
 import com.example.final_project.project.product.repository.entity.Product;
 import com.example.final_project.project.product.repository.ProductRepository;
 import com.example.final_project.project.product.repository.ProductService;

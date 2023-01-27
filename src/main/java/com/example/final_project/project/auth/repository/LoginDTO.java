@@ -1,7 +1,11 @@
 package com.example.final_project.project.auth.repository;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginDTO {
+    @NotBlank(message = "Username mustn't be empty!")
     private String name;
+    @NotBlank(message = "Password mustn't be empty!")
     private String password;
 
     public LoginDTO(String name, String password) {

@@ -1,4 +1,4 @@
-package com.example.final_project.error;
+package com.example.final_project.exceptions;
 
 public class IncorrectInputException extends RuntimeException{
     public IncorrectInputException(String message) {

@@ -1,8 +1,8 @@
 package com.example.final_project.project.order.control;
 
 import com.example.final_project.other.GlobalVariables;
-import com.example.final_project.project.order.repository.entity.Order;
 import com.example.final_project.project.order.repository.QuantityPriceDTO;
+import com.example.final_project.project.order.repository.entity.Order;
 import com.example.final_project.project.product.repository.entity.Product;
 import com.example.final_project.project.order.repository.OrderService;
 import com.example.final_project.project.order.repository.OrderRepository;
@@ -10,7 +10,7 @@ import com.example.final_project.project.user.repository.UserDTO;
 import com.example.final_project.project.user.repository.UserIdBalanceDTO;
 import com.example.final_project.project.user.repository.UserRepository;
 import com.example.final_project.project.user.repository.UserService;
-import com.example.final_project.error.IncorrectInputException;
+import com.example.final_project.exceptions.IncorrectInputException;
 import com.example.final_project.project.product.repository.ProductRepository;
 import com.example.final_project.project.auth.control.EmailService;
 import com.example.final_project.project.user.repository.entity.User;
@@ -147,18 +147,18 @@ public class OrderServiceImp implements OrderService {
             BigDecimal balance = getAllUserBalance.get(i).getBalance();
             if (balance.compareTo(totalPrice) >= 0) {
                 orderRepository.approveOrders(quantityPrice.get(i).getId());
-                emailService.sendMessage(
-                        getAllUserBalance.get(i).getEmail(),
-                        "Your order",
-                        "Hello, your order Approved, Total price is: " + totalPrice);
-                orderRepository.updateUserBalance(totalPrice, getAllUserBalance.get(i).getId());
+//                emailService.sendMessage(
+//                        getAllUserBalance.get(i).getEmail(),
+//                        "Your order",
+//                        "Hello, your order Approved, Total price is: " + totalPrice);
+//                orderRepository.updateUserBalance(totalPrice, getAllUserBalance.get(i).getId());
 
             } else {
                 orderRepository.disapproveOrders(quantityPrice.get(i).getId());
-                emailService.sendMessage(
-                        getAllUserBalance.get(i).getEmail(),
-                        "Your order",
-                        "Not enough money!" + totalPrice);
+//                emailService.sendMessage(
+//                        getAllUserBalance.get(i).getEmail(),
+//                        "Your order",
+//                        "Not enough money!" + totalPrice);
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.final_project.error;
+package com.example.final_project.exceptions;
 
 public class ErrorResponse {
     private int status;

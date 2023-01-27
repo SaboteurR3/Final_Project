@@ -1,11 +1,11 @@
 package com.example.final_project.project.auth.control;
 
+import com.example.final_project.exceptions.RegistrationException;
 import com.example.final_project.other.GlobalVariables;
 import com.example.final_project.project.auth.repository.LoginDTO;
 import com.example.final_project.project.auth.repository.RegistrationDTO;
-import com.example.final_project.error.LoginException;
+import com.example.final_project.exceptions.LoginException;
 import com.example.final_project.project.auth.repository.entity.Role;
-import com.example.final_project.project.user.repository.UserDTO;
 import com.example.final_project.project.user.repository.UserRepository;
 import com.example.final_project.project.user.repository.entity.User;
 import com.example.final_project.project.auth.repository.RoleService;
@@ -46,7 +46,7 @@ public class AuthService {
         if (user == null ) {
             System.out.println(user.getPassword());
             System.out.println(passwordEncoder.encode(loginDto.getPassword()));
-            throw new LoginException("Something went wrong!");
+            throw new LoginException();
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -60,14 +60,14 @@ public class AuthService {
     public void register(RegistrationDTO registrationDTO) {
         if (userService.existsByName(registrationDTO.getName())
                 || userService.existsByEmail(registrationDTO.getEmail())) {
-            throw new LoginException("Something went wrong!");
+            throw new RegistrationException();
         }
         User user = new User();
         user.setName(registrationDTO.getName());
         user.setEmail(registrationDTO.getEmail());
         user.setBalance(BigDecimal.valueOf(500));
         user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-        Role roles = roleService.findRoleByName("USER").get();
+        Role roles = roleService.findRoleByName("USER").orElse(null);
         user.setRoles(Collections.singletonList(roles));
         userService.saveUser(user);
     }

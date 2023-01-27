@@ -3,6 +3,7 @@ package com.example.final_project.project.auth.boundary;
 import com.example.final_project.project.auth.repository.RegistrationDTO;
 import com.example.final_project.project.auth.control.AuthService;
 import com.example.final_project.project.auth.repository.LoginDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +20,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginDTO loginDto) {
         authService.login(loginDto);
         return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);
     }
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegistrationDTO registrationDTO) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationDTO registrationDTO) {
         authService.register(registrationDTO);
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
     }
