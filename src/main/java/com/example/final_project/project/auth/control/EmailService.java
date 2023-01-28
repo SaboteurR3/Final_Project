@@ -2,6 +2,7 @@ package com.example.final_project.project.auth.control;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class EmailService {
     JavaMailSender emailSender;
     public EmailService(JavaMailSender emailSender) {

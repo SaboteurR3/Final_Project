@@ -9,6 +9,7 @@ import com.example.final_project.project.user.repository.UserRepository;
 import com.example.final_project.project.user.repository.entity.User;
 import com.example.final_project.project.auth.repository.RoleService;
 import com.example.final_project.project.user.repository.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 
 @Service
+@Transactional
 public class AuthService {
     private AuthenticationManager authenticationManager;
     private UserService userService;
