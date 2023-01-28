@@ -31,7 +31,7 @@ public class EmailService {
                 mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()), fileSystemResource);
                 emailSender.send(mimeMessage);
             } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

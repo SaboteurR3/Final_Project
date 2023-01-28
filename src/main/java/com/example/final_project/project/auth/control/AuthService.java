@@ -1,7 +1,6 @@
 package com.example.final_project.project.auth.control;
 
 import com.example.final_project.exceptions.RegistrationException;
-import com.example.final_project.other.GlobalVariables;
 import com.example.final_project.project.auth.repository.LoginDTO;
 import com.example.final_project.project.auth.repository.RegistrationDTO;
 import com.example.final_project.exceptions.LoginException;
@@ -52,8 +51,6 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getName(),
                         loginDto.getPassword()));
-        // დავიმახსოვროთ მოხმარებლის სახელი
-        GlobalVariables.CURRENT_USER = loginDto.getName();
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

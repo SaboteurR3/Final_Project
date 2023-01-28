@@ -1,6 +1,5 @@
 package com.example.final_project.project.order.control;
 
-import com.example.final_project.other.GlobalVariables;
 import com.example.final_project.project.order.repository.QuantityPriceDTO;
 import com.example.final_project.project.order.repository.entity.Order;
 import com.example.final_project.project.product.repository.entity.Product;
@@ -15,6 +14,8 @@ import com.example.final_project.project.product.repository.ProductRepository;
 import com.example.final_project.project.auth.control.EmailService;
 import com.example.final_project.project.user.repository.entity.User;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,7 +62,10 @@ public class OrderServiceImp implements OrderService {
             throw new IncorrectInputException("Something went wrong!");
         }
         // თუ მოიძებნა წამოვიღოთ დალოგინებული მომხმარებლის ინფორმაცია რომელიც დაგვჭირდება ახალი ორდერის დამატებისას
-        UserDTO userByName = userService.getUserByName(GlobalVariables.CURRENT_USER);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        UserDTO userByName = userService.getUserByName(currentPrincipalName);
         User user = new User(
                 userByName.getId(),
                 userByName.getName(),
@@ -118,7 +122,9 @@ public class OrderServiceImp implements OrderService {
     @Override
     public void cancelUserOrders() {
         // ამოვიღოთ დალოგინებული მოხმარებელი
-        UserDTO userByName = userService.getUserByName(GlobalVariables.CURRENT_USER);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        UserDTO userByName = userService.getUserByName(currentPrincipalName);
         // წავშალოთ მისი შეკვეთები
         orderRepository.cancelUserOrders(userByName.getId());
     }
@@ -126,7 +132,9 @@ public class OrderServiceImp implements OrderService {
     @Override
     public void cancelUserOrderById(long id) {
         // მოხმარებელს მხოლოდ თავისი ორდერის წაშლა შეუძლია შესაბამისი Id - ით (სხვისას ვერ წაშლის :) )
-        UserDTO userByName = userService.getUserByName(GlobalVariables.CURRENT_USER);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        UserDTO userByName = userService.getUserByName(currentPrincipalName);
         Integer productByUserId = orderRepository.getOrderIdWhereUserIdIs(userByName.getId());
         if (productByUserId == null) {
             throw new IncorrectInputException("Something went wrong");
