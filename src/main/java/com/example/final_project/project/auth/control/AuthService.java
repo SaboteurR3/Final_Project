@@ -14,19 +14,21 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class AuthService {
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
-    private RoleService roleService;
-    private PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     public AuthService(AuthenticationManager authenticationManager,
@@ -44,10 +46,17 @@ public class AuthService {
     public void login(LoginDTO loginDto) {
         // შევამოწმოთ ასეთი მომხმარებელი თუ არსებობს და თუ პაროლი სწორია
         User user = userRepository.getUserByUsername(loginDto.getName());
-        if (user == null ) {
-            System.out.println(user.getPassword());
-            System.out.println(passwordEncoder.encode(loginDto.getPassword()));
-            throw new LoginException();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(user == null) {
+            throw new LoginException("Something went wrong!");
+        } else {
+            boolean passwordMatches = encoder.matches(
+                    loginDto.getPassword(),
+                    user.getPassword()
+            );
+            if (!passwordMatches) {
+                throw new LoginException("Something went wrong!");
+            }
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
