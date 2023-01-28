@@ -22,5 +22,5 @@ public interface OrderService {
     void disapproveOrders(long id);
     List<UserIdBalanceDTO> getUsersBalanceAndEmail();
     void updateUserBalance(BigDecimal totalPrice, long userId);
-    void saveAttachment(MultipartFile file, long id) throws IOException;
+    void uploadFile(MultipartFile[] files);
 }

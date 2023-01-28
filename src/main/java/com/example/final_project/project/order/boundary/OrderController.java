@@ -1,17 +1,23 @@
 package com.example.final_project.project.order.boundary;
 
 import com.example.final_project.project.order.repository.entity.Order;
-import com.example.final_project.project.auth.control.EmailService;
 import com.example.final_project.project.product.repository.ProductService;
 import com.example.final_project.project.order.repository.OrderService;
 import com.example.final_project.project.user.repository.UserService;
+import jakarta.servlet.ServletContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @RestController
@@ -21,7 +27,9 @@ public class OrderController {
     ProductService productService;
     UserService userService;
 
-    public OrderController(OrderService orderService, ProductService productService, UserService userService) {
+    public OrderController(OrderService orderService,
+                           ProductService productService,
+                           UserService userService) {
         this.orderService = orderService;
         this.productService = productService;
         this.userService = userService;
@@ -61,10 +69,9 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/uploadFile/{orders_id}")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
-                                             @PathVariable long orders_id) throws IOException {
-        orderService.saveAttachment(file, orders_id);
-        return new ResponseEntity<>("File uploaded successfully!", HttpStatus.OK);
+    @PostMapping("/uploadFile")
+    public ResponseEntity<String> uploadFile(@RequestParam("files") MultipartFile[] files) {
+        orderService.uploadFile(files);
+        return new ResponseEntity<>("Files uploaded successfully!", HttpStatus.OK);
     }
 }

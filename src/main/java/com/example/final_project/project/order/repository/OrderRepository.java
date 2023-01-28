@@ -75,8 +75,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "where order_status = 'pending'"
             ,nativeQuery = true)
     List<QuantityPriceDTO> OrderQuantity();
-
-    @Modifying
-    @Query(value = "Update orders set order_check = :check where orders_id = :id", nativeQuery = true)
-    void saveCheckWhereOrderIdIs(@Param("check") byte[] check, @Param("id") long id);
 }

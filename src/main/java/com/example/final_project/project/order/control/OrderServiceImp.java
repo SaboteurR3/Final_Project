@@ -20,6 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -151,7 +156,7 @@ public class OrderServiceImp implements OrderService {
 //                        getAllUserBalance.get(i).getEmail(),
 //                        "Your order",
 //                        "Hello, your order Approved, Total price is: " + totalPrice);
-//                orderRepository.updateUserBalance(totalPrice, getAllUserBalance.get(i).getId());
+                orderRepository.updateUserBalance(totalPrice, getAllUserBalance.get(i).getId());
 
             } else {
                 orderRepository.disapproveOrders(quantityPrice.get(i).getId());
@@ -183,12 +188,22 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public void saveAttachment(MultipartFile file, long id) throws IOException {
-        Optional<Order> byId = orderRepository.findById(id);
-        if(byId.isEmpty()) {
-            throw new IncorrectInputException("No such order - " + id);
+    public void uploadFile(MultipartFile[] files) {
+        try {
+            for (var file : files) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd ");
+                String newFileName = simpleDateFormat.format(new Date()) + file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get("C:\\uploads\\" + newFileName);
+                Path write = Files.write(path, bytes);
+                emailService.sendMailWithAttachment(
+                        "toEmail",
+                        "Order check",
+                        "Your order",
+                        "C:\\uploads\\" + newFileName);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        byte[] bytes = file.getBytes();
-        orderRepository.saveCheckWhereOrderIdIs(bytes, id);
     }
 }

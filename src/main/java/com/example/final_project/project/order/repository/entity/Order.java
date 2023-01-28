@@ -21,8 +21,6 @@ public class Order {
 
     @Column(name = "order_status")
     private String status;
-    @Lob
-    private byte[] order_check;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable ( // products_orders table Many to Many
@@ -61,14 +59,6 @@ public class Order {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public byte[] getOrder_check() {
-        return order_check;
-    }
-
-    public void setOrder_check(byte[] order_check) {
-        this.order_check = order_check;
     }
 
     public String getDate() {
