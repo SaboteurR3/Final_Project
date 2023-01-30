@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "users_id")
     private Long id;
     @Column(name = "users_name")
@@ -24,7 +24,7 @@ public class User {
     private BigDecimal balance;
     @Column(name = "users_password")
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable ( // users_roles table Many to Many
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -34,7 +34,7 @@ public class User {
             )
     )
     private List<Role> roles = new ArrayList<>();
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Order> orders;
 
     public User(String name, String email, String password, List<Role> roles, BigDecimal balance) {

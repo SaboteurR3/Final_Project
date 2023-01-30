@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.Objects;
 
 @Service
-@Transactional
 public class EmailService {
     JavaMailSender emailSender;
     public EmailService(JavaMailSender emailSender) {

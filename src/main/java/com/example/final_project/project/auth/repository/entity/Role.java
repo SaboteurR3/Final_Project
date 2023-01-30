@@ -9,7 +9,7 @@ import java.util.Collection;
 @Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "roles_id")
     private Long id;
     @Column(name = "roles_name")

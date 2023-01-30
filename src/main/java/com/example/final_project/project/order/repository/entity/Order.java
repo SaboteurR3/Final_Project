@@ -10,7 +10,7 @@ import java.util.Collection;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "orders_id")
     private Long id;
 
@@ -22,7 +22,7 @@ public class Order {
     @Column(name = "order_status")
     private String status;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable ( // products_orders table Many to Many
             name = "products_orders",
             joinColumns = @JoinColumn(
@@ -37,7 +37,7 @@ public class Order {
 
     @Column(name = "product_id")
     private Collection<Product> products;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
