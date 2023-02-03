@@ -1,6 +1,8 @@
 package com.example.final_project.project.auth.boundary;
 
+import com.example.final_project.exceptions.RegistrationException;
 import com.example.final_project.project.auth.repository.LoginDTO;
+import com.example.final_project.project.auth.repository.RegistrationDTO;
 import com.example.final_project.project.user.repository.UserRepository;
 import com.example.final_project.project.user.repository.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,12 +13,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.client.match.JsonPathRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -42,37 +54,47 @@ class AuthControllerTest {
         return user;
     }
 
-    @Test
-    void givenValidCredentials_whenLogin_thenSuccess() throws Exception {
+    private LoginDTO createLoginDTOMock() {
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setName("dummyName");
-        loginDTO.setPassword("dummyPassword");
-        Mockito.doReturn(createLoginDTOMock(loginDTO)).when(userRepository).getUserByUsername(Mockito.any());
-        mockMvc.perform(post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-//                .andExpect(result -> assertEquals("User logged in successfully"), )
+        loginDTO.setName(null);
+        loginDTO.setPassword("password");
+        return loginDTO;
     }
 
+    private RegistrationDTO createRegistrationDTOMock() {
+        RegistrationDTO registrationDTO = new RegistrationDTO();
+        registrationDTO.setName("+++++++");
+        registrationDTO.setEmail("dummyEmail@gmail.com");
+        registrationDTO.setPassword("dummyPassword");
+        return registrationDTO;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private RegistrationDTO createValidRegistrationDTOMock() {
+        RegistrationDTO registrationDTO = new RegistrationDTO();
+        registrationDTO.setName("user40");
+        registrationDTO.setEmail("dummyEmail@gmail.com");
+        registrationDTO.setPassword("dummyPassword");
+        return registrationDTO;
+    }
 
     @Test
-    void register() {
+    void givenInvalidCredentials_whenLogin_thenBadRequest() throws Exception {
+        Mockito.doReturn(createLoginDTOMock(createLoginDTOMock())).when(userRepository).getUserByUsername(Mockito.any());
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createLoginDTOMock())))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("Username mustn't be empty!")));
     }
-//    void givenInvalidUsername_whenLogin_thenBadRequest() throws Exception
+
+    @Test
+    void givenInvalidCredentials_whenRegister_thenBadRequest() throws Exception {
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createRegistrationDTOMock())))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().contains("must match")));
+    }
 }

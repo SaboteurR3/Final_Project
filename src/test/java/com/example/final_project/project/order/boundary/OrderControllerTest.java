@@ -17,15 +17,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -133,19 +139,35 @@ class OrderControllerTest {
                 .andExpect(status().isOk());
     }
 
-    // TODO File upload Test
-//    @Test
-//    @WithMockUser(authorities = "ADMIN")
-//    void uploadFile() throws Exception {
-//        String fileName = "sampleFile.txt";
-//        MockMultipartFile sampleFile = new MockMultipartFile(
-//                "uploaded-file",
-//                fileName,
-//                "text/plain",
-//                "This is the file content".getBytes()
-//        );
-//        mockMvc.perform(multipart("/order/uploadFile")
-//                        .file(sampleFile))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    void givenValidFileName_whenUploadFile_thenSuccess() throws Exception {
+        String fileName = "sampleFile.txt";
+        MockMultipartFile sampleFile = new MockMultipartFile(
+                "files",
+                fileName,
+                "text/plain",
+                "Some Content".getBytes());
+
+        mockMvc.perform(multipart("/order/uploadFile")
+                        .file(sampleFile))
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        assertTrue(result.getResponse().getContentAsString().contains("Files uploaded successfully!")));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ADMIN")
+    void givenInvalidFileName_whenUploadFile_thenBadRequest() throws Exception {
+        String fileName = "sampleFile.txt";
+        MockMultipartFile sampleFile = new MockMultipartFile(
+                "InvalidFileName",
+                fileName,
+                "text/plain",
+                "Some Content".getBytes());
+
+        mockMvc.perform(multipart("/order/uploadFile")
+                        .file(sampleFile))
+                .andExpect(status().isBadRequest());
+    }
 }
