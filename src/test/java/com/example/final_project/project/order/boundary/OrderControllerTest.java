@@ -46,8 +46,6 @@ class OrderControllerTest {
     private OrderRepository orderRepository;
     @SpyBean
     private UserRepository userRepository;
-    @SpyBean
-    private EmailService emailService;
 
     public Order createOrderMock(Order order) {
         return order;
