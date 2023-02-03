@@ -69,14 +69,6 @@ class AuthControllerTest {
         return registrationDTO;
     }
 
-    private RegistrationDTO createValidRegistrationDTOMock() {
-        RegistrationDTO registrationDTO = new RegistrationDTO();
-        registrationDTO.setName("user40");
-        registrationDTO.setEmail("dummyEmail@gmail.com");
-        registrationDTO.setPassword("dummyPassword");
-        return registrationDTO;
-    }
-
     @Test
     void givenInvalidCredentials_whenLogin_thenBadRequest() throws Exception {
         Mockito.doReturn(createLoginDTOMock(createLoginDTOMock())).when(userRepository).getUserByUsername(Mockito.any());
