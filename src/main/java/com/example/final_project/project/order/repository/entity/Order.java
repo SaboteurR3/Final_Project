@@ -76,4 +76,28 @@ public class Order {
     public User getUser() {
         return user;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setProducts(Collection<Product> products) {
+        this.products = products;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

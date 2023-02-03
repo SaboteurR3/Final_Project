@@ -22,4 +22,5 @@ public class UserDTO {
     public String getEmail() {
         return email;
     }
+
 }

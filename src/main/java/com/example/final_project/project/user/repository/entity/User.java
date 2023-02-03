@@ -103,7 +103,7 @@ public class User {
         this.roles = roles;
     }
 
-    public BigDecimal getBalance(BigDecimal v) {
+    public BigDecimal getBalance() {
         return balance;
     }
 

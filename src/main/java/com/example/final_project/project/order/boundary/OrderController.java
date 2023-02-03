@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @PostMapping("/addOrder")
-    public Order addOrder(@RequestBody Order order) { // 1 ორდერზე ვამატებ 1 ნივთს
+    public Order addOrder(@RequestBody Order order) {
         return orderService.addOrder(order);
     }
 

@@ -204,11 +204,11 @@ public class OrderServiceImp implements OrderService {
                 byte[] bytes = file.getBytes();
                 Path path = Paths.get("C:\\uploads\\" + newFileName);
                 Path write = Files.write(path, bytes);
-                emailService.sendMailWithAttachment(
-                        "toEmail",
-                        "Order check",
-                        "Your order",
-                        "C:\\uploads\\" + newFileName);
+//                emailService.sendMailWithAttachment(
+//                        "toEmail",
+//                        "Order check",
+//                        "Your order",
+//                        "C:\\uploads\\" + newFileName);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,6 +15,9 @@ public class UserIdBalanceDTO {
         this.email = email;
     }
 
+    public UserIdBalanceDTO() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -25,5 +28,17 @@ public class UserIdBalanceDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
