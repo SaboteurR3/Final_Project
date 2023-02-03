@@ -9,7 +9,8 @@ import java.util.Collection;
 @Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles")
+    @SequenceGenerator(name = "roles", sequenceName = "seq_roles", allocationSize = 1, initialValue = 1000)
     @Column(name = "roles_id")
     private Long id;
     @Column(name = "roles_name")

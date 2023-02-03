@@ -13,7 +13,8 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users")
+    @SequenceGenerator(name = "users", sequenceName = "seq_users", allocationSize = 1, initialValue = 1000)
     @Column(name = "users_id")
     private Long id;
     @Column(name = "users_name")
